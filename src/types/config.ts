@@ -1,0 +1,26 @@
+export type ColorString = `#${string}`;
+
+export type ConfigExpress = {
+  port: number;
+  webhookReceiveUrl: string;
+};
+
+export type ConfigDiscord = {
+  webhookName: string;
+  webhookUrl: string;
+  webhookAvatar: string;
+};
+
+export type ConfigTeamMember = {
+  gitlabId: string;
+  discordId: string;
+  gitlabUsername: string;
+};
+
+export type ConfigTeam = ConfigTeamMember[];
+
+export type ConfigColors = {
+  [key: string]: {
+    [key: string]: ColorString;
+  };
+};
