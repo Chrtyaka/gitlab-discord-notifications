@@ -1,7 +1,7 @@
 import { findUser, getConfig } from '../utils/config';
 import { createMention } from '../discord/utils';
 import { ConfigTeam, ConfigTeamMember } from '../types/config';
-import { GitlabUserNotFoundError } from '../utils/errors';
+import { GitlabUserNotFoundError } from '../errors/gitlab';
 import { log } from '../utils/log';
 
 const APP_CONFIG = getConfig();

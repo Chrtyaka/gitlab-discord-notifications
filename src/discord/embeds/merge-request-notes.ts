@@ -3,7 +3,7 @@ import { generateUserMention } from '../../gitlab/utils';
 import { MrNotesWebhookBody } from '../../types/gitlab';
 import { NoteColors } from '../../types/gitlab/notes';
 import { getConfig } from '../../utils/config';
-import { GitlabUserNotFoundError } from '../../utils/errors';
+import { GitlabUserNotFoundError } from '../../errors/gitlab';
 
 const APP_CONFIG = getConfig();
 

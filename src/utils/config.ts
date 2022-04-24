@@ -1,7 +1,7 @@
 import nconf from 'nconf';
 import path from 'path';
 import { ConfigTeam, ConfigTeamMember } from '../types/config';
-import { GitlabUserNotFoundError } from './errors';
+import { GitlabUserNotFoundError } from '../errors/gitlab';
 
 const config = nconf;
 
