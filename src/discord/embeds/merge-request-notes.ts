@@ -2,34 +2,44 @@ import { MessageEmbed, WebhookMessageOptions } from 'discord.js';
 import { generateUserMention } from '../../gitlab/utils';
 import { MrNotesWebhookBody } from '../../types/gitlab';
 import { NoteColors } from '../../types/gitlab/notes';
-import { findUser, getConfig } from '../../utils/config';
+import { getConfig } from '../../utils/config';
+import { GitlabUserNotFoundError } from '../../utils/errors';
 
 const APP_CONFIG = getConfig();
 
 export const generateMrNotesMessageContent = (
   webhook: MrNotesWebhookBody,
-): Partial<WebhookMessageOptions> => {
+): Partial<WebhookMessageOptions> | null => {
   const colors: NoteColors = APP_CONFIG.get('colors:notes');
 
   const { author_id } = webhook.merge_request;
   const { username } = webhook.user;
-  const authorUserName = findUser(author_id, 'gitlabId').gitlabUsername;
 
-  const authorMention = generateUserMention(authorUserName);
+  const authorMention = generateUserMention(author_id, 'gitlabId');
   const noteAuthor = generateUserMention(username);
+
+  if (
+    authorMention instanceof GitlabUserNotFoundError ||
+    noteAuthor instanceof GitlabUserNotFoundError
+  ) {
+    return null;
+  }
 
   const embed = new MessageEmbed()
     .setColor(colors.add)
-    .setTitle(
-      `Hey! :bell: Somebody added a note to your merge request!`,
-    )
+    .setTitle(`Hey! :bell: ${username} added a note to your merge request!`)
     .setDescription(webhook.object_attributes.note)
     .addFields([
       {
-        name: 'URL',
+        name: 'Note',
         value: webhook.object_attributes.url,
       },
-    ]);
+      {
+        name: 'Merge request',
+        value: webhook.merge_request.url,
+      },
+    ])
+    .setTimestamp();
 
   return { embeds: [embed], content: `${authorMention}` };
 };

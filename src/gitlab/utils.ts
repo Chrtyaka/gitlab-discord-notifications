@@ -1,11 +1,22 @@
 import { findUser, getConfig } from '../utils/config';
 import { createMention } from '../discord/utils';
-import { ConfigTeam } from '../types/config';
+import { ConfigTeam, ConfigTeamMember } from '../types/config';
+import { GitlabUserNotFoundError } from '../utils/errors';
+import { log } from '../utils/log';
 
 const APP_CONFIG = getConfig();
 
-export const generateUserMention = (username: string): string => {
-  const user = findUser(username, 'gitlabUsername');
+export const generateUserMention = (
+  value: string | number,
+  arg: keyof ConfigTeamMember = 'gitlabUsername',
+): string | GitlabUserNotFoundError => {
+  const user = findUser(value, arg);
+
+  if (user instanceof GitlabUserNotFoundError) {
+    log(user.message, 'error');
+
+    return user;
+  }
 
   return createMention(user.discordId);
 };

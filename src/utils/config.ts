@@ -1,6 +1,7 @@
 import nconf from 'nconf';
 import path from 'path';
 import { ConfigTeam, ConfigTeamMember } from '../types/config';
+import { GitlabUserNotFoundError } from './errors';
 
 const config = nconf;
 
@@ -14,14 +15,13 @@ export const getConfig = () => {
 export const findUser = (
   value: string | number,
   arg: keyof ConfigTeamMember = 'gitlabId',
-): ConfigTeamMember => {
+): ConfigTeamMember | GitlabUserNotFoundError => {
   const team: ConfigTeam = config.get('team');
 
   const user = team.find((item) => item[arg] === value.toString());
 
   if (!user) {
-    console.log({ arg, value });
-    throw new Error(`User with ${arg} ${value} not found in config=`);
+    return new GitlabUserNotFoundError(value);
   }
 
   return user;
