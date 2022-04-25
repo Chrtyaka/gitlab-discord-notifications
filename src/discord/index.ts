@@ -1,4 +1,4 @@
-import { getConfig } from '../utils/config';
+import { getConfig } from '../app-config';
 import { WebhookClient } from 'discord.js';
 import { WebhookMessageOptions } from 'discord.js';
 

@@ -1,4 +1,4 @@
-import { findUser, getConfig } from '../utils/config';
+import { findUser, getConfig } from '../app-config';
 import { createMention } from '../discord/utils';
 import { ConfigTeam, ConfigTeamMember } from '../types/config';
 import { GitlabUserNotFoundError } from '../errors/gitlab';

@@ -2,7 +2,7 @@ import { MessageEmbed, WebhookMessageOptions } from 'discord.js';
 import { generateUserMention } from '../../gitlab/utils';
 import { MrNotesWebhookBody } from '../../types/gitlab';
 import { NoteColors } from '../../types/gitlab/notes';
-import { getConfig } from '../../utils/config';
+import { getConfig } from '../../app-config';
 import { GitlabUserNotFoundError } from '../../errors/gitlab';
 
 const APP_CONFIG = getConfig();

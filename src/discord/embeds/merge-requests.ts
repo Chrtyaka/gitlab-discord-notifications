@@ -8,7 +8,7 @@ import type {
 import { generateUserMention } from '../../gitlab/utils';
 import { pickReviewers } from '../../gitlab/utils';
 
-import { getConfig } from '../../utils/config';
+import { getConfig } from '../../app-config';
 import { getNextDay } from '../../utils/date';
 
 const APP_CONFIG = getConfig();

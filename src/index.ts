@@ -1,5 +1,5 @@
 import express from 'express';
-import { getConfig } from './utils/config';
+import { getConfig } from './app-config';
 import bodyParser from 'body-parser';
 import { WebhookBody } from './types/gitlab';
 import { CustomRequest } from './types/requests';
