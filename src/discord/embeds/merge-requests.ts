@@ -10,6 +10,7 @@ import { pickReviewers } from '../../gitlab/utils';
 
 import { getConfig } from '../../app-config';
 import { getNextDay } from '../../utils/date';
+import { ConfigFeatures } from '../../types/config';
 
 const APP_CONFIG = getConfig();
 
@@ -23,6 +24,8 @@ export const generateOpenMrMessageContent = (
   webhook: WebhookBody<MergeRequestAttributes>,
 ): Partial<WebhookMessageOptions> => {
   const colors: MergeRequestColors = APP_CONFIG.get('colors:mergeRequests');
+  const features: ConfigFeatures = APP_CONFIG.get('features');
+
   const { open } = colors;
   const { username } = webhook.user;
 
@@ -30,7 +33,9 @@ export const generateOpenMrMessageContent = (
 
   const createdByMention = generateUserMention(username);
 
-  const content = generateMentionReviewers(username);
+  const content = features.pickReviewers
+    ? generateMentionReviewers(username)
+    : '';
 
   const { object_attributes: mrDetails } = webhook;
 

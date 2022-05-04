@@ -1,3 +1,5 @@
+import { AvailableFeatures } from './features';
+
 export type ColorString = `#${string}`;
 
 export type ConfigExpress = {
@@ -23,4 +25,8 @@ export type ConfigColors = {
   [key: string]: {
     [key: string]: ColorString;
   };
+};
+
+export type ConfigFeatures = {
+  [key in AvailableFeatures]: boolean;
 };
