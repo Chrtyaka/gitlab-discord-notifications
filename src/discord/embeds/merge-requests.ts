@@ -26,6 +26,8 @@ export const generateOpenMrMessageContent = (
   const colors: MergeRequestColors = APP_CONFIG.get('colors:mergeRequests');
   const features: ConfigFeatures = APP_CONFIG.get('features');
 
+  const pickReviewersEnabled = features.pickReviewers;
+
   const { open } = colors;
   const { username } = webhook.user;
 
@@ -33,9 +35,9 @@ export const generateOpenMrMessageContent = (
 
   const createdByMention = generateUserMention(username);
 
-  const content = features.pickReviewers
+  const content = pickReviewersEnabled
     ? generateMentionReviewers(username)
-    : '';
+    : null;
 
   const { object_attributes: mrDetails } = webhook;
 
@@ -60,6 +62,5 @@ export const generateOpenMrMessageContent = (
     },
   ]);
   embed.setTimestamp();
-
   return { embeds: [embed], content };
 };
