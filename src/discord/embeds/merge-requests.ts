@@ -11,6 +11,7 @@ import { pickReviewers } from '../../gitlab/utils';
 import { getConfig } from '../../app-config';
 import { getNextDay } from '../../utils/date';
 import { ConfigFeatures } from '../../types/config';
+import { GitlabUserNotFoundError } from '../../errors/gitlab';
 
 const APP_CONFIG = getConfig();
 
@@ -33,7 +34,11 @@ export const generateOpenMrMessageContent = (
 
   const embed = new MessageEmbed();
 
-  const createdByMention = generateUserMention(username);
+  let createdByMention = generateUserMention(username);
+
+  if (createdByMention instanceof GitlabUserNotFoundError) {
+    createdByMention = username;
+  }
 
   const content = pickReviewersEnabled
     ? generateMentionReviewers(username)
