@@ -52,9 +52,8 @@ export const generateOpenMrMessageContent = (
     },
     {
       name: 'Reviewers',
-      value: content,
+      value: content || 'No reviewers',
     },
-
     {
       name: 'Review Deadline',
       value: `**${getNextDay()}** :alarm_clock:`,
