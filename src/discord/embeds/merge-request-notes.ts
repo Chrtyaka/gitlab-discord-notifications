@@ -27,7 +27,7 @@ export const generateMrNotesMessageContent = (
 
   const embed = new MessageEmbed()
     .setColor(colors.add)
-    .setTitle(`Hey! :bell: ${authorMention} added a note to your merge request!`)
+    .setTitle(`Hey! :bell: ${username} added a note to your merge request!`)
     .setDescription(webhook.object_attributes.note)
     .addFields([
       {
