@@ -1,9 +1,6 @@
 import { MessageEmbed, WebhookMessageOptions } from 'discord.js';
 import type { WebhookBody } from '../../../types/gitlab';
-import type {
-  MergeRequestAttributes,
-  MergeRequestColors,
-} from '../../../types/gitlab/merge-requests';
+import type { MergeRequestAttributes } from '../../../types/gitlab/merge-requests';
 
 import { generateUserMention } from '../../../gitlab/utils';
 import { generateMentionReviewers } from '../../../gitlab/utils';
@@ -13,17 +10,19 @@ import { getNextDay } from '../../../utils/date';
 import { ConfigFeatures } from '../../../types/config';
 import { GitlabUserNotFoundError } from '../../../errors/gitlab';
 
+import { getEmbedColor } from './utils';
+
 const APP_CONFIG = getConfig();
 
 export function generateMessageContent(
   webhook: WebhookBody<MergeRequestAttributes>,
 ): Partial<WebhookMessageOptions> {
-  const colors: MergeRequestColors = APP_CONFIG.get('colors:mergeRequests');
   const features: ConfigFeatures = APP_CONFIG.get('features');
 
   const pickReviewersEnabled = features.pickReviewers;
 
-  const { open } = colors;
+  const embedColor = getEmbedColor('open');
+
   const { username } = webhook.user;
 
   const embed = new MessageEmbed();
@@ -41,7 +40,7 @@ export function generateMessageContent(
   const { object_attributes: mrDetails } = webhook;
 
   embed.setTitle('New merge request was opened! :rocket:');
-  embed.setColor(open);
+  embed.setColor(embedColor);
   embed.setDescription(
     `Merge request opened by ${createdByMention}: ${mrDetails.title}`,
   );
