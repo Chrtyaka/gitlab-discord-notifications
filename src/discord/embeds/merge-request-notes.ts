@@ -25,6 +25,8 @@ export const generateMrNotesMessageContent = (
     return null;
   }
 
+  const messageMention = authorMention === noteAuthor ? null : authorMention;
+
   const embed = new MessageEmbed()
     .setColor(colors.add)
     .setTitle(`Hey! :bell: ${username} added a note to your merge request!`)
@@ -41,5 +43,5 @@ export const generateMrNotesMessageContent = (
     ])
     .setTimestamp();
 
-  return { embeds: [embed], content: `${authorMention}` };
+  return { embeds: [embed], content: `${messageMention}` };
 };
