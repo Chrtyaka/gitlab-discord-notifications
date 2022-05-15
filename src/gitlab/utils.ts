@@ -31,3 +31,9 @@ export const pickReviewers = (createdByUser: string) => {
 
   return reviewers.slice(0, 2).map((item) => item.discordId);
 };
+
+export const generateMentionReviewers = (username: string) => {
+  const reviewers = pickReviewers(username);
+
+  return reviewers.map((item) => generateUserMention(item)).join('');
+};
