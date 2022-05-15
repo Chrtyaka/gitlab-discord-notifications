@@ -1,29 +1,23 @@
 import { MessageEmbed, WebhookMessageOptions } from 'discord.js';
-import type { WebhookBody } from '../../types/gitlab';
+import type { WebhookBody } from '../../../types/gitlab';
 import type {
   MergeRequestAttributes,
   MergeRequestColors,
-} from '../../types/gitlab/merge-requests';
+} from '../../../types/gitlab/merge-requests';
 
-import { generateUserMention } from '../../gitlab/utils';
-import { pickReviewers } from '../../gitlab/utils';
+import { generateUserMention } from '../../../gitlab/utils';
+import { generateMentionReviewers } from '../../../gitlab/utils';
 
-import { getConfig } from '../../app-config';
-import { getNextDay } from '../../utils/date';
-import { ConfigFeatures } from '../../types/config';
-import { GitlabUserNotFoundError } from '../../errors/gitlab';
+import { getConfig } from '../../../app-config';
+import { getNextDay } from '../../../utils/date';
+import { ConfigFeatures } from '../../../types/config';
+import { GitlabUserNotFoundError } from '../../../errors/gitlab';
 
 const APP_CONFIG = getConfig();
 
-const generateMentionReviewers = (username: string) => {
-  const reviewers = pickReviewers(username);
-
-  return reviewers.map((item) => generateUserMention(item)).join('');
-};
-
-export const generateOpenMrMessageContent = (
+export function generateMessageContent(
   webhook: WebhookBody<MergeRequestAttributes>,
-): Partial<WebhookMessageOptions> => {
+): Partial<WebhookMessageOptions> {
   const colors: MergeRequestColors = APP_CONFIG.get('colors:mergeRequests');
   const features: ConfigFeatures = APP_CONFIG.get('features');
 
@@ -68,4 +62,4 @@ export const generateOpenMrMessageContent = (
   ]);
   embed.setTimestamp();
   return { embeds: [embed], content };
-};
+}
