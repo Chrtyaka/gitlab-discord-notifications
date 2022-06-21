@@ -31,7 +31,7 @@ export function generateMessageContent(
   const embed = new MessageEmbed();
 
   embed
-    .setTitle('Merge request merged! :partying_face :tada:')
+    .setTitle('Merge request merged! :partying_face: :tada:')
     .setColor(embedColor)
     .setDescription(`Merge request merged by ${mergedBy}!`)
     .addFields([

@@ -11,7 +11,7 @@ export function generateMessageContent(
   const embedColor = getEmbedColor(webhook.object_attributes.status);
 
   const { username } = webhook.user;
-  const { id } = webhook.object_attributes;
+  const { id, ref, tag } = webhook.object_attributes;
   const { web_url } = webhook.project;
 
   const embed = new MessageEmbed();
@@ -31,6 +31,10 @@ export function generateMessageContent(
       {
         name: 'URL',
         value: pipelineUrl,
+      },
+      {
+        name: 'REF',
+        value: ref,
       },
     ])
     .setTimestamp();
