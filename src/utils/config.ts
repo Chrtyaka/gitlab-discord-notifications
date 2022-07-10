@@ -2,7 +2,6 @@ import { GitlabUserNotFoundError } from '../errors/gitlab';
 import { ConfigProjectNotFoundError } from '../errors/config';
 import {
   ConfigTeamMember,
-  ConfigTeam,
   ConfigDiscord,
   ConfigProjectItem,
   ConfigProjects,
@@ -12,10 +11,15 @@ import { getConfig } from '../app-config';
 export const findUser = (
   value: string | number,
   arg: keyof ConfigTeamMember = 'gitlabId',
-): ConfigTeamMember | GitlabUserNotFoundError => {
-  const config = getConfig();
+  projectId: number,
+): ConfigTeamMember | GitlabUserNotFoundError | ConfigProjectNotFoundError => {
+  const project = findProjectById(projectId);
 
-  const team: ConfigTeam = config.get('team');
+  if (project instanceof ConfigProjectNotFoundError) {
+    return project;
+  }
+
+  const { team } = project;
 
   const user = team.find((item) => item[arg] === value.toString());
 
