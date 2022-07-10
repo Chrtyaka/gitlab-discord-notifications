@@ -30,3 +30,11 @@ export type ConfigColors = {
 export type ConfigFeatures = {
   [key in AvailableFeatures]: boolean;
 };
+
+export type ConfigProjectItem = {
+  id: number | number[];
+  discord: ConfigDiscord;
+  team: ConfigTeam;
+};
+
+export type ConfigProjects = ConfigProjectItem[];
