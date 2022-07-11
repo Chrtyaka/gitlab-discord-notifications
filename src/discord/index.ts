@@ -1,11 +1,19 @@
-import { getConfig } from '../app-config';
 import { WebhookClient } from 'discord.js';
 import { WebhookMessageOptions } from 'discord.js';
+import { findDiscordSettingsByProject } from '../utils/config';
+import { ConfigProjectNotFoundError } from '../errors/config';
 
-const config = getConfig();
+export const sendMessage = (
+  message: WebhookMessageOptions,
+  projectId: number,
+) => {
+  const settings = findDiscordSettingsByProject(projectId);
 
-export const sendMessage = (message: WebhookMessageOptions) => {
-  const { webhookUrl, webhookName, webhookAvatar } = config.get('discord');
+  if (settings instanceof ConfigProjectNotFoundError) {
+    return settings;
+  }
+
+  const { webhookUrl, webhookName, webhookAvatar } = settings;
 
   const webhookClient = new WebhookClient({ url: webhookUrl });
 
