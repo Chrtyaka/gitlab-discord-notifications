@@ -1,19 +1,30 @@
-import { getConfig } from '../app-config';
-import { findUser } from '../utils/config';
+import { findTeamByProjectId, findUser } from '../utils/config';
 import { createMention } from '../discord/utils';
-import { ConfigTeam, ConfigTeamMember } from '../types/config';
+import { ConfigTeamMember } from '../types/config';
 import { GitlabUserNotFoundError } from '../errors/gitlab';
 import { log } from '../utils/log';
+import {
+  ConfigProjectNotFoundError,
+  ConfigProjectTeamNotFound,
+} from '../errors/config';
 
-const APP_CONFIG = getConfig();
+function isUserObjectIsError(
+  user: ConfigProjectNotFoundError | GitlabUserNotFoundError | ConfigTeamMember,
+): user is GitlabUserNotFoundError | ConfigProjectNotFoundError {
+  return (
+    user instanceof GitlabUserNotFoundError ||
+    user instanceof ConfigProjectNotFoundError
+  );
+}
 
 export const generateUserMention = (
   value: string | number,
+  projectId: number,
   arg: keyof ConfigTeamMember = 'gitlabUsername',
 ): string | GitlabUserNotFoundError => {
-  const user = findUser(value, arg);
+  const user = findUser(value, projectId, arg);
 
-  if (user instanceof GitlabUserNotFoundError) {
+  if (isUserObjectIsError(user)) {
     log(user.message, 'error');
 
     return user;
@@ -22,8 +33,16 @@ export const generateUserMention = (
   return createMention(user.discordId);
 };
 
-export const pickReviewers = (createdByUser: string) => {
-  const team: ConfigTeam = APP_CONFIG.get('team');
+export const pickReviewers = (createdByUser: string, projectId: number) => {
+  const team = findTeamByProjectId(projectId);
+
+  if (
+    team instanceof ConfigProjectNotFoundError ||
+    team instanceof ConfigProjectTeamNotFound
+  ) {
+    log(team.message, 'error');
+    return team;
+  }
 
   const reviewers = team
     .filter((item) => item.gitlabUsername !== createdByUser)
@@ -32,8 +51,19 @@ export const pickReviewers = (createdByUser: string) => {
   return reviewers.slice(0, 2).map((item) => item.discordId);
 };
 
-export const generateMentionReviewers = (username: string) => {
-  const reviewers = pickReviewers(username);
+export const generateMentionReviewers = (
+  username: string,
+  projectId: number,
+) => {
+  const reviewers = pickReviewers(username, projectId);
 
-  return reviewers.map((item) => generateUserMention(item)).join('');
+  if (
+    reviewers instanceof ConfigProjectNotFoundError ||
+    reviewers instanceof ConfigProjectTeamNotFound
+  ) {
+    log(reviewers.message, 'error');
+    return '';
+  }
+
+  return reviewers.map((item) => generateUserMention(item, projectId)).join('');
 };
