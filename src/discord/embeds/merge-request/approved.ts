@@ -13,10 +13,11 @@ export function generateMessageContent(
 
   const { username: approvedByUsername } = webhook.user;
   const { author_id: authorUserId } = webhook.object_attributes;
+  const { id: project_id } = webhook.project;
 
-  let approvedBy = generateUserMention(approvedByUsername);
+  let approvedBy = generateUserMention(approvedByUsername, project_id);
 
-  let createdBy = generateUserMention(authorUserId, 'gitlabId');
+  let createdBy = generateUserMention(authorUserId, project_id, 'gitlabId');
 
   if (approvedBy instanceof GitlabUserNotFoundError) {
     approvedBy = approvedByUsername;

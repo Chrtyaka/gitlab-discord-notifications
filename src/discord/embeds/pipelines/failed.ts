@@ -13,10 +13,11 @@ export function generateMessageContent(
   const { username } = webhook.user;
   const { id, ref, tag } = webhook.object_attributes;
   const { web_url } = webhook.project;
+  const { id: project_id } = webhook.project;
 
   const embed = new MessageEmbed();
 
-  let pipelineOwnerMention = generateUserMention(username);
+  let pipelineOwnerMention = generateUserMention(username, project_id);
 
   if (pipelineOwnerMention instanceof GitlabUserNotFoundError) {
     pipelineOwnerMention = username;

@@ -14,9 +14,10 @@ export const generateMrNotesMessageContent = (
 
   const { author_id } = webhook.merge_request;
   const { username } = webhook.user;
+  const { id: project_id } = webhook.project;
 
-  const authorMention = generateUserMention(author_id, 'gitlabId');
-  const noteAuthor = generateUserMention(username);
+  const authorMention = generateUserMention(author_id, project_id, 'gitlabId');
+  const noteAuthor = generateUserMention(username, project_id);
 
   if (
     authorMention instanceof GitlabUserNotFoundError ||

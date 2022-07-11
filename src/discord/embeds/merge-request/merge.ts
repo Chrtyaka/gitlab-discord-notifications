@@ -13,10 +13,11 @@ export function generateMessageContent(
 
   const { username: mergeByUsername } = webhook.user;
   const { author_id: authorUserId } = webhook.object_attributes;
+  const { id: project_id } = webhook.project;
 
-  let mergedBy = generateUserMention(mergeByUsername);
+  let mergedBy = generateUserMention(mergeByUsername, project_id);
 
-  let createdBy = generateUserMention(authorUserId, 'gitlabId');
+  let createdBy = generateUserMention(authorUserId, project_id, 'gitlabId');
 
   if (mergedBy instanceof GitlabUserNotFoundError) {
     mergedBy = mergeByUsername;

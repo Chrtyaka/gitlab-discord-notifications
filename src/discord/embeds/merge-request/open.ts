@@ -24,17 +24,18 @@ export function generateMessageContent(
   const embedColor = getEmbedColor('open');
 
   const { username } = webhook.user;
+  const { id: project_id } = webhook.project;
 
   const embed = new MessageEmbed();
 
-  let createdByMention = generateUserMention(username);
+  let createdByMention = generateUserMention(username, project_id);
 
   if (createdByMention instanceof GitlabUserNotFoundError) {
     createdByMention = username;
   }
 
   const content = pickReviewersEnabled
-    ? generateMentionReviewers(username)
+    ? generateMentionReviewers(username, project_id)
     : null;
 
   const { object_attributes: mrDetails } = webhook;
