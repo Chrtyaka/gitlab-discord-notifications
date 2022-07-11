@@ -7,9 +7,13 @@ export async function onMerge(
   action: WebhookBody<MergeRequestAttributes>,
 ): Promise<void> {
   const { embeds, content } = generateMessageContent(action);
+  const { id } = action.project;
 
-  await sendMessage({
-    content,
-    embeds,
-  });
+  await sendMessage(
+    {
+      content,
+      embeds,
+    },
+    id,
+  );
 }

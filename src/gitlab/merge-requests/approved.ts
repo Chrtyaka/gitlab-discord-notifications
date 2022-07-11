@@ -5,9 +5,13 @@ import { MergeRequestAttributes } from '../../types/gitlab/merge-requests';
 
 export async function onApproved(action: WebhookBody<MergeRequestAttributes>) {
   const { embeds, content } = generateMessageContent(action);
+  const { id } = action.project;
 
-  await sendMessage({
-    content,
-    embeds,
-  });
+  await sendMessage(
+    {
+      content,
+      embeds,
+    },
+    id,
+  );
 }

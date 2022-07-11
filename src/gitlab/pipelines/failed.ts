@@ -11,8 +11,13 @@ export async function onFailed(action: WebhookBody<PipelineAttributes>) {
 
   const { content, embeds } = message;
 
-  await sendMessage({
-    content,
-    embeds,
-  });
+  const { id } = action.project;
+
+  await sendMessage(
+    {
+      content,
+      embeds,
+    },
+    id,
+  );
 }
