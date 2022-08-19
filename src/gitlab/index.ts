@@ -5,11 +5,8 @@ import type {
   WebhookObjectAttributes,
 } from '../types/gitlab';
 import { NoteAttributes } from '../types/gitlab/notes';
-import {
-  PipelineAttributes,
-  PipelineWebhookBody,
-} from '../types/gitlab/pipelines';
-import { setupMergeRequestAction } from './merge-requests';
+import { PipelineWebhookBody } from '../types/gitlab/pipelines';
+import { setupMergeRequestAction } from './merge-requests/webhook-events';
 import { setupMrNotesAction } from './merge-requests-notes';
 import { setupPipelineAction } from './pipelines';
 
@@ -39,7 +36,6 @@ function isPipelineAction(
 }
 
 export const setupAction = (webhook: WebhookBody) => {
-  console.log(webhook);
   if (isMergeRequestAction(webhook)) {
     setupMergeRequestAction(webhook);
   } else if (isNoteAction(webhook)) {
